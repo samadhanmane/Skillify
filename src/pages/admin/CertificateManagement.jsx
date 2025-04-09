@@ -55,25 +55,13 @@ const CertificateManagement = () => {
         setCertificates(formattedCertificates);
         console.log('Fetched certificates from MongoDB:', formattedCertificates);
       } else {
-        // Fallback to mock data only in development if needed
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('No certificates returned from API, using mock data for development');
-          fetchMockCertificates();
-        } else {
-          setCertificates([]);
-          setError('No certificates found');
-        }
+        setCertificates([]);
+        setError('No certificates found');
       }
     } catch (err) {
       console.error('Error fetching certificates:', err);
       setError('Failed to load certificates');
       toast.error('Failed to load certificates');
-      
-      // Fallback to mock data only in development
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('Error fetching certificates, using mock data for development');
-        fetchMockCertificates();
-      }
     } finally {
       setLoading(false);
     }
@@ -89,99 +77,6 @@ const CertificateManagement = () => {
     
     if (expiry && expiry < now) return 'expired';
     return 'active';
-  };
-  
-  // Fallback mock data for development purposes only
-  const fetchMockCertificates = () => {
-    const mockData = [
-      { 
-        id: 'CERT-001', 
-        title: 'Web Development Fundamentals', 
-        issuedTo: 'John Doe', 
-        email: 'john@example.com', 
-        issueDate: '2023-05-15', 
-        expiryDate: '2025-05-15', 
-        status: 'active',
-        issuer: 'Tech Academy',
-        verified: true,
-        verificationScore: 95,
-        certificateImage: 'https://res.cloudinary.com/demo/image/upload/v1234567890/skillify-certificates/sample_certificate_1.jpg',
-        fileType: 'image'
-      },
-      { 
-        id: 'CERT-002', 
-        title: 'Data Science Fundamentals', 
-        issuedTo: 'Jane Smith', 
-        email: 'jane@example.com', 
-        issueDate: '2023-03-10', 
-        expiryDate: '2025-03-10', 
-        status: 'active',
-        issuer: 'Data Institute',
-        verified: true,
-        verificationScore: 92,
-        certificateFile: 'https://res.cloudinary.com/demo/raw/upload/skillify-certificates-pdf/sample_certificate_2',
-        fileType: 'pdf'
-      },
-      { 
-        id: 'CERT-003', 
-        title: 'Cloud Computing Essentials', 
-        issuedTo: 'Bob Williams', 
-        email: 'bob@example.com', 
-        issueDate: '2023-01-20', 
-        expiryDate: '2025-01-20', 
-        status: 'active',
-        issuer: 'Cloud Academy',
-        verified: false,
-        verificationScore: 86,
-        credentialURL: 'https://cloudacademy.com/certificates/123456',
-        fileType: 'url'
-      },
-      { 
-        id: 'CERT-004', 
-        title: 'Cybersecurity Specialist', 
-        issuedTo: 'Alice Johnson', 
-        email: 'alice@example.com', 
-        issueDate: '2022-11-05', 
-        expiryDate: '2024-11-05', 
-        status: 'pending',
-        issuer: 'Security Institute',
-        verified: false,
-        verificationScore: 65,
-        aiSuggestion: "Certificate appears legitimate but issuer name couldn't be fully verified. The credential ID format is valid but not found in issuer database. Recommend manual review of issuer details."
-      },
-      { 
-        id: 'CERT-005', 
-        title: 'UI/UX Design Principles', 
-        issuedTo: 'Charlie Brown', 
-        email: 'charlie@example.com', 
-        issueDate: '2023-04-01', 
-        expiryDate: '2025-04-01', 
-        status: 'expired',
-        issuer: 'Design School',
-        verified: true,
-        verificationScore: 90,
-        certificateImage: 'https://res.cloudinary.com/demo/image/upload/v1234567890/skillify-certificates/sample_certificate_5.jpg',
-        fileType: 'image'
-      },
-      { 
-        id: 'CERT-006', 
-        title: 'Advanced Machine Learning', 
-        issuedTo: 'David Wilson', 
-        email: 'david@example.com', 
-        issueDate: '2023-02-15', 
-        expiryDate: '2025-02-15', 
-        status: 'pending',
-        issuer: 'AI Learning Center',
-        verified: false,
-        verificationScore: 72,
-        aiSuggestion: "Issue date format doesn't match expected pattern. Certificate title appears valid but the holder name has low confidence match (68%). Credential URL was verified against issuer database.",
-        certificateFile: 'https://res.cloudinary.com/demo/raw/upload/skillify-certificates-pdf/sample_certificate_6',
-        fileType: 'pdf'
-      },
-    ];
-    
-    setCertificates(mockData);
-    console.warn('Using mock certificate data');
   };
   
   // Filter certificates based on status and search term
@@ -268,10 +163,10 @@ const CertificateManagement = () => {
   const handleDelete = async (cert) => {
     try {
       setActionLoading(true);
-      // In production, this would call the real API
-      // await apiClient.delete(`/admin/certificates/${cert.id}`);
+      // Call the admin API to delete the certificate
+      await apiClient.delete(`/admin/certificates/${cert.id}`);
       
-      // For demo purposes, update locally
+      // Update the UI after successful deletion
       const updatedCertificates = certificates.filter(c => c.id !== cert.id);
       setCertificates(updatedCertificates);
       
@@ -411,13 +306,10 @@ const CertificateManagement = () => {
       {/* Search and filters */}
       <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
         <div className="relative flex-grow">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400" />
-          </div>
           <input 
             type="text" 
             placeholder="Search by title, name, email, or ID"
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
+            className="block w-full px-4 py-2 border border-gray-300 rounded-md"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -425,11 +317,8 @@ const CertificateManagement = () => {
         
         <div className="flex space-x-2">
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Filter className="h-4 w-4 text-gray-400" />
-            </div>
             <select 
-              className="block pl-10 pr-10 py-2 border border-gray-300 rounded-md appearance-none"
+              className="block px-4 py-2 border border-gray-300 rounded-md appearance-none"
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >

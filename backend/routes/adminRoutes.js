@@ -17,7 +17,8 @@ import {
   getSystemLogs,
   getSystemSettings,
   updateSystemSettings,
-  getAllCertificates
+  getAllCertificates,
+  adminDeleteCertificate
 } from '../controllers/adminController.js';
 
 const router = express.Router();
@@ -33,6 +34,7 @@ router.put('/users/:id/activate', protect, admin, activateUser);
 
 // Certificate management
 router.get('/certificates', protect, admin, getAllCertificates);
+router.delete('/certificates/:id', protect, admin, adminDeleteCertificate);
 
 // API management
 router.get('/api-keys', protect, admin, getApiKeys);

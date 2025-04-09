@@ -8,6 +8,7 @@ import Certificate from '../models/Certificate.js';
 import Skill from '../models/Skill.js';
 import UserAnalytics from '../models/UserAnalytics.js';
 import crypto from 'crypto';
+import UserSkill from '../models/UserSkill.js';
 
 /**
  * @desc    Get system statistics
@@ -535,5 +536,65 @@ export const getAllCertificates = asyncHandler(async (req, res) => {
     success: true,
     count: certificates.length,
     certificates
+  });
+});
+
+/**
+ * @desc    Delete certificate (admin access)
+ * @route   DELETE /api/admin/certificates/:id
+ * @access  Private/Admin
+ */
+export const adminDeleteCertificate = asyncHandler(async (req, res) => {
+  const certificate = await Certificate.findById(req.params.id);
+  
+  if (!certificate) {
+    res.status(404);
+    throw new Error('Certificate not found');
+  }
+  
+  // Get the user who owns this certificate
+  const userId = certificate.user;
+  
+  // Update UserSkill records for that user
+  for (const skillId of certificate.skills) {
+    const userSkill = await UserSkill.findOne({
+      user: userId,
+      skill: skillId
+    });
+    
+    if (userSkill) {
+      // Remove certificate from list
+      userSkill.certificates = userSkill.certificates.filter(
+        id => id.toString() !== certificate._id.toString()
+      );
+      
+      if (userSkill.certificates.length === 0) {
+        // No certificates for this skill, remove it
+        await UserSkill.deleteOne({ _id: userSkill._id });
+      } else {
+        // Update points
+        userSkill.points -= 10;
+        if (userSkill.points < 0) userSkill.points = 0;
+        userSkill.updatedAt = Date.now();
+        await userSkill.save();
+      }
+    }
+  }
+  
+  // Delete certificate
+  await Certificate.deleteOne({ _id: certificate._id });
+  
+  // Log the action
+  await SystemLog.create({
+    level: 'warning',
+    message: `Admin deleted certificate: ${certificate.title} (ID: ${certificate._id}) for user ID: ${userId}`,
+    source: 'adminController',
+    userId: req.user._id,
+    ipAddress: req.ip || 'unknown'
+  });
+  
+  res.status(200).json({
+    success: true,
+    message: 'Certificate deleted successfully by admin'
   });
 }); 

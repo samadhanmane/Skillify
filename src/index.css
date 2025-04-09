@@ -151,7 +151,7 @@
     left: 0;
     width: 100%;
     height: 4px;
-    @apply bg-gradient-to-r from-green-500 to-emerald-600;
+    @apply bg-gradient-to-r from-blue-500 to-purple-600;
     opacity: 0;
     transition: opacity 0.3s ease;
   }
