@@ -1,0 +1,448 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    
+    --radius: 0.5rem;
+  }
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  /* Ensure smooth scrolling behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Hide scrollbar for specific elements that might need scrolling */
+  .overflow-auto::-webkit-scrollbar,
+  .overflow-y-auto::-webkit-scrollbar,
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .dark {
+    --background: 222.2 47.4% 15%;
+    --foreground: 210 40% 98%;
+    
+    --card: 222.2 42% 17%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222.2 47.4% 15%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 15%;
+    
+    --secondary: 217.2 32.6% 25%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217.2 32.6% 23%;
+    --muted-foreground: 215 20.2% 80%;
+    
+    --accent: 217.2 32.6% 25%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62.8% 45%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 217.2 32.6% 25%;
+    --input: 217.2 32.6% 25%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Enhanced UI elements */
+@layer components {
+  /* Enhanced card shadows */
+  .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-lg hover:-translate-y-1;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  /* Profile cards */
+  .profile-card {
+    @apply rounded-xl shadow-md hover:shadow-xl;
+    transition: all 0.3s ease;
+  }
+  
+  /* Skill cards */
+  .skill-card {
+    @apply rounded-lg shadow-md hover:shadow-xl relative overflow-hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    @apply bg-gradient-to-r from-blue-500 to-purple-600;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .skill-card:hover::before {
+    opacity: 1;
+  }
+  
+  /* Certificate cards */
+  .certificate-card {
+    @apply rounded-lg shadow-md hover:shadow-xl relative overflow-hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .certificate-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    @apply bg-gradient-to-r from-green-500 to-emerald-600;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .certificate-card:hover::before {
+    opacity: 1;
+  }
+  
+  /* Button effects */
+  .btn-animated {
+    @apply relative overflow-hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-animated::after {
+    content: '';
+    @apply absolute top-0 h-full w-0 bg-white/20 left-0;
+    transition: width 0.3s ease;
+  }
+  
+  .btn-animated:hover::after {
+    @apply w-full;
+  }
+  
+  /* Auth pages */
+  .auth-container {
+    @apply min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-indigo-950;
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+  
+  .auth-card {
+    @apply rounded-xl shadow-2xl overflow-hidden bg-white dark:bg-gray-800/90;
+    width: 100%;
+    max-width: 900px;
+    min-height: 550px;
+  }
+  
+  .auth-form-side {
+    @apply p-8 md:p-12;
+  }
+  
+  .auth-image-side {
+    @apply hidden md:block bg-cover bg-center;
+    background-image: url('/auth-background.jpg');
+  }
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  min-height: 100vh;
+}
+
+/* Dark mode button improvements */
+.dark button[aria-label="Toggle theme"] {
+  @apply bg-gray-700 text-gray-200;
+}
+
+/* Improved button contrast in dark mode */
+.dark .btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+/* Save changes button improvements for dark mode */
+.dark button[type="submit"],
+.dark .save-button {
+  @apply bg-blue-600 text-white hover:bg-blue-700 border-none;
+}
+
+.dark button[type="submit"]:disabled,
+.dark .save-button:disabled {
+  @apply bg-gray-600 text-gray-300 cursor-not-allowed;
+}
+
+/* Improved button contrast in dark mode */
+.dark .btn-secondary {
+  @apply bg-gray-700 hover:bg-gray-600 text-white;
+}
+
+/* Dark mode badge improvements */
+.dark .badge {
+  @apply bg-gray-700 text-gray-200;
+}
+
+/* Landing page styles */
+.landing-hero {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.landing-card {
+  @apply rounded-xl shadow-2xl backdrop-blur-md;
+  transform: translateY(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.landing-card:hover {
+  transform: translateY(-5px);
+  @apply shadow-2xl;
+}
+
+.landing-feature-card {
+  @apply bg-white/90 dark:bg-gray-900/80 p-6 rounded-xl shadow-lg;
+  transform: translateY(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.landing-feature-card:hover {
+  transform: translateY(-5px);
+  @apply shadow-xl;
+}
+
+.landing-badge {
+  @apply h-10 w-10 rounded-full flex items-center justify-center mr-3;
+  transition: transform 0.3s ease;
+}
+
+.landing-feature-card:hover .landing-badge {
+  transform: scale(1.1);
+}
+
+/* Add custom styling for certificate card badges */
+.certificate-card .badge-container .badge {
+  background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+/* Custom class for certificate card badges */
+.certificate-badge {
+  background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+/* Add any custom styles below if needed */
+
+/* Add these additional dark mode styles */
+.dark .card {
+  @apply bg-card shadow-xl border-gray-700;
+}
+
+.dark .pdf-viewer {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+}
+
+.dark .bg-gray-900,
+.dark .bg-black {
+  @apply bg-slate-800;
+}
+
+.dark iframe {
+  @apply border border-gray-700;
+}
+
+/* Improve PDF viewer in dark mode */
+.dark .dialog-content-pdf {
+  @apply bg-slate-800 border-slate-700;
+}
+
+.dark .pdf-loading-spinner {
+  @apply bg-slate-800 bg-opacity-90;
+}
+
+.dark .pdf-error-message {
+  @apply text-red-400;
+}
+
+/* Custom PDF viewer improvements for dark mode */
+.dark .dialog-content-pdf {
+  @apply bg-slate-800 border-slate-700;
+}
+
+.dark .pdf-open-button {
+  @apply bg-slate-700 hover:bg-slate-600 text-slate-200 border-slate-600;
+}
+
+/* Add transitions for smooth theme switching */
+.transition-theme {
+  transition: background-color 0.3s ease-in-out, 
+              color 0.3s ease-in-out,
+              border-color 0.3s ease-in-out,
+              box-shadow 0.3s ease-in-out;
+}
+
+body, 
+.card, 
+.dialog-content, 
+button, 
+.badge, 
+.input, 
+.select, 
+.textarea {
+  @apply transition-theme;
+}
+
+/* Fix color contrast in dark mode for specific elements */
+.dark button {
+  @apply text-slate-200 border-slate-700;
+}
+
+.dark button:hover {
+  @apply border-slate-600;
+}
+
+.dark .muted-text {
+  @apply text-slate-400;
+}
+
+.dark .badge {
+  @apply bg-slate-700 text-slate-200;
+}
+
+/* PDF iframe specific dark mode styles */
+.dark iframe.pdf-viewer-iframe {
+  @apply bg-slate-800 border-slate-700;
+}
+
+/* Improve loading spinner in dark mode */
+.dark .loading-spinner {
+  @apply border-slate-600 border-t-slate-300;
+}
+
+/* Add a subtle background pattern to dark mode for visual interest */
+.dark body {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23232f3e' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* Shared Certificate Page styles */
+.animation-pulse {
+  animation: soft-pulse 3s infinite;
+}
+
+@keyframes soft-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Certificate card styles for shared page */
+.shared-certificate-card {
+  transition: all 0.3s ease;
+  @apply shadow-md hover:shadow-xl;
+}
+
+.shared-certificate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  @apply bg-gradient-to-r from-blue-500 to-purple-600;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.shared-certificate-card:hover::before {
+  opacity: 1;
+}
+
+/* Shared certificate page background effects */
+.shared-certificate-bg {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(63, 94, 251, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(252, 70, 107, 0.05) 0%, transparent 50%);
+  background-size: 150% 150%;
+  animation: bg-shift 20s ease infinite;
+}
+
+@keyframes bg-shift {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* Enhanced pdf viewer styles */
+.pdf-viewer {
+  @apply relative border rounded-md overflow-hidden;
+  min-height: 500px;
+}
+
+.pdf-loading-spinner {
+  @apply rounded-md;
+}
