@@ -124,7 +124,8 @@ const userSchema = new mongoose.Schema({
         'skill_level_up', 
         'perfect_verification', 
         'learning_streak',
-        'top_learner'
+        'top_learner',
+        'level_up'
       ]
     },
     details: {
