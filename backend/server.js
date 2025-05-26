@@ -151,6 +151,16 @@ app.get('/api/setup', (req, res) => {
   });
 });
 
+// Add a route for /setup that redirects to /api/setup
+app.get('/setup', (req, res) => {
+  res.status(200).json({ 
+    success: true, 
+    message: 'MongoDB connected and API is running',
+    version: process.env.API_VERSION || '1.0.0',
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Special redirect for profile URLs - redirects to frontend
 app.get('/profile/:email', (req, res) => {
   const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';

@@ -1,0 +1,44 @@
+# Deployment Fix Instructions
+
+## 1. Fix CORS Issue
+
+To fix the CORS issue between your Vercel frontend and Render backend, update your environment variables on Render:
+
+1. Go to your Render dashboard for the backend service (https://dashboard.render.com/)
+2. Navigate to the "Environment" tab
+3. Add or update the following environment variables:
+
+```
+NODE_ENV=production
+ALLOWED_ORIGINS=https://skillify-credentials.com,https://www.skillify-credentials.com,https://skillify-phi.vercel.app
+FRONTEND_URL=https://skillify-phi.vercel.app
+```
+
+4. Click "Save Changes"
+
+## 2. Fix 404 Not Found Error
+
+You're getting a 404 error because your frontend is requesting `/setup` but your backend has the route defined as `/api/setup`.
+
+To fix this, you need to deploy the updated server.js file that includes the new route handler for `/setup`.
+
+1. Commit and push the changes to server.js to your GitHub repository
+2. If Render is set up for automatic deployments, it should deploy automatically
+3. If not, manually deploy the latest version from your Render dashboard
+
+## 3. Verify the Deployment
+
+After the deployment is complete:
+
+1. Test the direct endpoint: https://skillify-2irh.onrender.com/setup
+2. It should return a JSON response with `success: true`
+3. Then test your frontend at https://skillify-phi.vercel.app
+
+## Alternative Frontend Fix
+
+If you can't update the backend right away, you can also fix this by updating your frontend code to use the correct API URL:
+
+1. Find where your API URL is defined in your frontend code
+2. Make sure it's using `https://skillify-2irh.onrender.com/api/setup` instead of `https://skillify-2irh.onrender.com/setup`
+
+This is likely in a file like `src/lib/axios.ts` or `src/setupBackend.ts` 
