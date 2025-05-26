@@ -161,6 +161,14 @@ app.get('/setup', (req, res) => {
   });
 });
 
+// Add routes for /auth/* that forward to /api/auth/*
+app.use('/auth', (req, res, next) => {
+  // Change the URL path
+  req.url = req.originalUrl.replace('/auth', '/api/auth');
+  // Forward the request to the next middleware
+  app.handle(req, res);
+});
+
 // Special redirect for profile URLs - redirects to frontend
 app.get('/profile/:email', (req, res) => {
   const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
