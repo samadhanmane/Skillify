@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
 import { Upload, FileUp, AlertCircle, FileCheck, Search, BarChart } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
@@ -142,7 +142,7 @@ const BulkVerification: React.FC<BulkVerificationProps> = ({ maxFiles = 10 }) =>
       };
       
       // Send bulk verification request
-      const response = await axios.post('/api/ml/bulk-verify', requestData);
+      const response = await apiClient.post('/ml/bulk-verify', requestData);
       
       if (response.data.success) {
         // Update files with results

@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import GamificationProgress from "@/components/gamification/GamificationProgress";
-import axios from "axios";
+import apiClient from "@/lib/axios";
 
 const DashboardPage: React.FC = () => {
   const { skills, certificates } = useAppContext();
@@ -21,8 +21,7 @@ const DashboardPage: React.FC = () => {
     const fetchGamificationData = async () => {
       try {
         setLoading(true);
-        // Fetch user's gamification data
-        const { data } = await axios.get('/api/gamification/profile');
+        const { data } = await apiClient.get('/gamification/profile');
         if (data.success) {
           setGamificationData(data.gamificationData);
         }

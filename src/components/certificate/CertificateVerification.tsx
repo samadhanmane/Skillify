@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
 import { 
   Card, 
   CardContent, 
@@ -96,7 +96,7 @@ const CertificateVerification = () => {
             formData.append('certificates', file);
           });
           
-          response = await axios.post('/api/certificates/verify/files', formData, {
+          response = await apiClient.post('/certificates/verify/files', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -111,7 +111,7 @@ const CertificateVerification = () => {
             return;
           }
           
-          response = await axios.post('/api/certificates/verify/link', { link });
+          response = await apiClient.post('/certificates/verify/link', { link });
           break;
           
         case 'id':
@@ -122,7 +122,7 @@ const CertificateVerification = () => {
             return;
           }
           
-          response = await axios.get(`/api/certificates/verify/${verificationId}`);
+          response = await apiClient.get(`/certificates/verify/${verificationId}`);
           break;
       }
       

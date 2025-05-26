@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from "@/lib/axios";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -32,7 +32,7 @@ const GamificationDashboard = () => {
     const fetchGamificationData = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get('/api/gamification/dashboard');
+        const { data } = await apiClient.get('/gamification/dashboard');
         if (data.success) {
           setGamificationData(data.gamificationData);
         } else {
@@ -51,7 +51,7 @@ const GamificationDashboard = () => {
 
   const acceptChallenge = async (challengeId) => {
     try {
-      const { data } = await axios.post(`/api/gamification/challenges/${challengeId}/accept`);
+      const { data } = await apiClient.post(`/gamification/challenges/${challengeId}/accept`);
       if (data.success) {
         // Update local state with the accepted challenge
         setGamificationData(prevState => {

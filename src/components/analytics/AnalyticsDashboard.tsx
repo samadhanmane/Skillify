@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -19,7 +19,7 @@ const AnalyticsDashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get('/api/analytics/dashboard');
+        const { data } = await apiClient.get('/analytics/dashboard');
         if (data.success) {
           setDashboardData(data.dashboardData);
         } else {

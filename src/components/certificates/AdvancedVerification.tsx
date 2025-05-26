@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import apiClient from '@/lib/axios';
 import { Upload, X, FileUp, Check, AlertTriangle, Shield, Database, Image } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
@@ -128,7 +128,7 @@ const AdvancedVerification: React.FC = () => {
       };
       
       // Send verification request
-      const response = await axios.post('/api/ml/verify-certificate', requestData);
+      const response = await apiClient.post('/ml/verify-certificate', requestData);
       
       if (response.data && response.data.success) {
         setVerificationResult(response.data);
