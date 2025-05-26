@@ -37,3 +37,19 @@ yarn-error.log*
 backend/.env
 backend/temp/*
 backend/eng.traineddata
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary directories
+
+backend/temp/
+__mocks__/
+dist/
+
+# Mock data
+**/mock*.json
+**/mock*.js
+**/mock*.ts

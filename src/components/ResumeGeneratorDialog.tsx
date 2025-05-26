@@ -27,8 +27,6 @@ const ResumeGeneratorDialog = () => {
     if (!json || !json.data) return null;
     
     const data = json.data;
-    console.log('Resume data received:', data);
-    console.log('Skills data:', data.skills);
     
     return (
       <div className="resume-preview font-sans text-sm">

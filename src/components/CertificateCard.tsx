@@ -185,7 +185,7 @@ const CertificateCard: React.FC<CertificateCardProps> = ({ certificate, readOnly
   };
 
   return (
-    <Card className="w-full h-full flex flex-col hover:shadow-md transition-shadow">
+    <Card className="w-full h-full flex flex-col border rounded-lg shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)] transition-all duration-200 hover:scale-[1.02] hover:bg-accent/5 certificate-card">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
         <div className="flex items-center gap-2">
           <CardTitle className="text-md font-bold">{certificate.title}</CardTitle>

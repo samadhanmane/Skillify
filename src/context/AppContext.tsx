@@ -165,7 +165,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setGamification(response.data.gamificationData);
       }
     } catch (error) {
-      console.error('Error fetching gamification data:', error);
       // Don't show error toast to user to avoid annoyance, just log to console
     } finally {
       setLoading(prev => ({ ...prev, gamification: false }));
@@ -185,7 +184,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         return response.data.streak;
       }
     } catch (error) {
-      console.error('Error updating streak:', error);
+      // Don't show error toast to user to avoid annoyance, just log to console
     }
   };
 
@@ -202,7 +201,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       const timeSinceLastFetch = currentTime - parseInt(lastFetchTimestamp);
       // If we've fetched data recently, don't fetch again
       if (timeSinceLastFetch < THRESHOLD_MS) {
-        console.log('Skipping data fetch - fetched recently');
         return;
       }
     }
@@ -215,9 +213,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       setLoading(prev => ({ ...prev, certificates: true }));
       const certResponse = await apiClient.get('/certificates');
       if (certResponse.data.success) {
-        // Log certificates for debugging
-        console.log('Raw certificates data from API:', certResponse.data.certificates);
-        
         // Map backend response to our Certificate interface
         const mappedCertificates = certResponse.data.certificates.map((cert: any) => ({
           id: cert._id,
@@ -236,14 +231,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
           imageUrl: cert.certificateImage || '/placeholder.svg',
           isPublic: cert.isPublic !== false
         }));
-        
-        console.log('Mapped certificates with file data:', mappedCertificates.map(c => ({
-          id: c.id,
-          title: c.title,
-          hasImage: Boolean(c.certificateImage),
-          hasPdf: Boolean(c.certificateFile),
-          fileType: c.fileType
-        })));
         
         setCertificates(mappedCertificates);
       }
@@ -264,7 +251,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
           setSkills(mappedSkills);
         }
       } catch (error) {
-        console.error('Error fetching skills:', error);
         // Try alternative endpoint as fallback
         try {
           const altSkillResponse = await apiClient.get('/skills/user');
@@ -278,7 +264,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
             setSkills(mappedSkills);
           }
         } catch (fallbackError) {
-          console.error('Error fetching skills (fallback):', fallbackError);
           toast.error('Failed to load your skills. Please refresh and try again.');
         }
       }
@@ -289,14 +274,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       if (profileResponse.data.success) {
         const userData = profileResponse.data.user;
         
-        // Debug log for education data
-        console.log('Education data from profile response:', userData.education);
-        
         // Explicitly fetch education data
         try {
           const educationResponse = await apiClient.get('/users/education');
           if (educationResponse.data.success) {
-            console.log('Explicitly fetched education data:', educationResponse.data.education);
             // Use the explicitly fetched education data
             setEducation(educationResponse.data.education || []);
             
@@ -304,7 +285,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
             userData.education = educationResponse.data.education || [];
           }
         } catch (eduError) {
-          console.error('Error fetching education data:', eduError);
+          // Don't show error toast to user to avoid annoyance, just log to console
         }
         
         setUserProfile({
@@ -327,10 +308,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         
         // Set education state
         if (userData.education && Array.isArray(userData.education)) {
-          console.log('Setting education state with data:', userData.education);
           setEducation(userData.education);
         } else {
-          console.warn('Education data is not an array or is missing:', userData.education);
           setEducation([]);
         }
       }
@@ -339,7 +318,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       await fetchGamificationData();
       
     } catch (error) {
-      console.error('Error fetching data:', error);
       toast.error('Failed to load your data. Please refresh and try again.');
     } finally {
       // Ensure all loading states are reset
@@ -432,7 +410,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         checkForBadges();
       }
     } catch (error) {
-      console.error('Error adding skill:', error);
       // Check if it's a duplicate skill error from the backend
       if (error.response?.status === 400 && error.response?.data?.message === 'You already have this skill') {
         toast.error(`You already have the skill "${skill.name}" in your profile`);
@@ -455,7 +432,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         toast.success(`Updated ${updatedSkill.name}`);
       }
     } catch (error) {
-      console.error('Error updating skill:', error);
       toast.error('Failed to update skill. Please try again.');
     }
   };
@@ -472,7 +448,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         }
       }
     } catch (error) {
-      console.error('Error deleting skill:', error);
       toast.error('Failed to delete skill. Please try again.');
     }
   };
@@ -553,7 +528,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         checkForBadges();
       }
     } catch (error) {
-      console.error('Error adding certificate:', error);
       toast.error('Failed to add certificate. Please try again.');
     }
   };
@@ -580,7 +554,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         toast.success(`Updated ${updatedCertificate.title} certificate`);
       }
     } catch (error) {
-      console.error('Error updating certificate:', error);
       toast.error('Failed to update certificate. Please try again.');
     }
   };
@@ -591,7 +564,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       console.log(`Attempting to delete certificate with ID: ${id}`);
       
       if (!id) {
-        console.error('Invalid certificate ID for deletion:', id);
         toast.error('Cannot delete certificate: Invalid ID');
         return;
       }
@@ -606,14 +578,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         }
       }
     } catch (error: any) {
-      console.error('Error deleting certificate:', error);
-      console.error('Certificate deletion error details:', {
-        id,
-        errorMessage: error.message,
-        errorResponse: error.response?.data,
-        errorStatus: error.response?.status
-      });
-      
       // Show more specific error message based on status code
       if (error.response?.status === 404) {
         toast.error('Certificate not found. It may have been already deleted.');
@@ -654,7 +618,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         toast.success(`Certificate is now ${isPublic ? 'public' : 'private'}`);
       }
     } catch (error) {
-      console.error('Error toggling certificate privacy:', error);
       toast.error('Failed to update certificate privacy');
     }
   };
@@ -686,7 +649,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         checkForBadges();
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
       toast.error('Failed to update profile. Please try again.');
     }
   };
@@ -719,7 +681,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       }
       return null;
     } catch (error) {
-      console.error('Error updating profile image:', error);
       toast.error('Failed to update profile image. Please try again.');
       return null;
     }
@@ -748,7 +709,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         });
       }
     } catch (error) {
-      console.error('Error checking for badges:', error);
       // Don't show error toast to avoid annoyance
     }
   };
@@ -776,7 +736,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         toast.success('Education added successfully');
       }
     } catch (error) {
-      console.error('Error adding education:', error);
       toast.error('Failed to add education. Please try again.');
     } finally {
       setLoading(prev => ({ ...prev, education: false }));
@@ -816,7 +775,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         toast.success('Education updated successfully');
       }
     } catch (error) {
-      console.error('Error updating education:', error);
       toast.error('Failed to update education. Please try again.');
     } finally {
       setLoading(prev => ({ ...prev, education: false }));
@@ -845,7 +803,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         toast.success('Education deleted successfully');
       }
     } catch (error) {
-      console.error('Error deleting education:', error);
       toast.error('Failed to delete education. Please try again.');
     } finally {
       setLoading(prev => ({ ...prev, education: false }));
@@ -863,7 +820,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         return response.data.resume;
       }
     } catch (error) {
-      console.error('Error generating resume:', error);
       toast.error('Failed to generate resume. Please try again.');
       return null;
     } finally {
