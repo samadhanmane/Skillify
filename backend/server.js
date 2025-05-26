@@ -169,6 +169,36 @@ app.use('/auth', (req, res, next) => {
   app.handle(req, res);
 });
 
+// Add routes for /certificates that forward to /api/certificates
+app.use('/certificates', (req, res, next) => {
+  req.url = req.originalUrl.replace('/certificates', '/api/certificates');
+  app.handle(req, res);
+});
+
+// Add routes for /gamification/* that forward to /api/gamification/*
+app.use('/gamification', (req, res, next) => {
+  req.url = req.originalUrl.replace('/gamification', '/api/gamification');
+  app.handle(req, res);
+});
+
+// Add routes for /skills/* that forward to /api/skills/*
+app.use('/skills', (req, res, next) => {
+  req.url = req.originalUrl.replace('/skills', '/api/skills');
+  app.handle(req, res);
+});
+
+// Add routes for /users/* that forward to /api/users/*
+app.use('/users', (req, res, next) => {
+  req.url = req.originalUrl.replace('/users', '/api/users');
+  app.handle(req, res);
+});
+
+// Add routes for /analytics/* that forward to /api/analytics/*
+app.use('/analytics', (req, res, next) => {
+  req.url = req.originalUrl.replace('/analytics', '/api/analytics');
+  app.handle(req, res);
+});
+
 // Special redirect for profile URLs - redirects to frontend
 app.get('/profile/:email', (req, res) => {
   const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
